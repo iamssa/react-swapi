@@ -18,6 +18,7 @@ const GET_ALL_PEOPLE = gql(`
 const GET_PERSON_BY_ID = gql(`
     query Person($id: ID) {
         person(id: $id) {
+            name
             gender
             birthYear
             created

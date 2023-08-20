@@ -9,8 +9,9 @@ import {
     TableRow
 } from "@mui/material";
 import {GetAllPeople} from "../hooks/queries/people";
+import {FC} from "react";
 
-export function PersonList() {
+export const PersonList: FC = () => {
     const {loading, error, data, fetchMore} = GetAllPeople(5);
 
     if (loading) {

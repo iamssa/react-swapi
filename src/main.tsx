@@ -1,14 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+import {Error} from "./pages/Error";
+import {PersonDetail} from "./pages/PersonDetail";
+import {PersonList} from "./pages/PersonList";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <App />,
+        element: <PersonList />,
+        errorElement: <Error />,
+    },
+    {
+        path: "person/:personId",
+        element: <PersonDetail />,
     },
 ]);
 

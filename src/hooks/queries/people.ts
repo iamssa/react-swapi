@@ -8,8 +8,9 @@ const GET_ALL_PEOPLE = gql(`
             people {
                 id
                 name
-                mass
+                gender
                 birthYear
+                hairColor
             }
         }
     }
@@ -21,7 +22,6 @@ const GET_PERSON_BY_ID = gql(`
             name
             gender
             birthYear
-            created
             hairColor
         }
     }
@@ -31,11 +31,24 @@ export const GetAllPeople = (count: number) => {
     return useQuery(GET_ALL_PEOPLE, {
         variables: {
             first: count
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult) return prev;
+
+            return {
+                allPeople: {
+                    ...fetchMoreResult.allPeople,
+                    people: [
+                        ...prev.allPeople.people,
+                        ...fetchMoreResult.allPeople.people
+                    ]
+                }
+            };
         }
     });
 }
 
-export const GetPersonById = (id: string) => {
+export const GetPersonById = (id: string | undefined) => {
     return useQuery(GET_PERSON_BY_ID, {
         variables: {
             id

@@ -1,66 +1,42 @@
 import {
-    Alert, Button,
-    CircularProgress,
-    Paper,
-    Table,
-    TableBody,
-    TableCell, TableContainer,
-    TableHead,
-    TableRow
+    Alert,
+    Button,
+    styled,
 } from "@mui/material";
 import {GetAllPeople} from "../hooks/queries/people";
-import {FC} from "react";
+import {FC, useState} from "react";
+import {SkeletonTable} from "../components/SkeletonTable/SkeletonTable";
+import {PersonTable} from "../components/PersonTable/PersonTable";
 
 export const PersonList: FC = () => {
-    const {loading, error, data, fetchMore} = GetAllPeople(5);
+    const [rowsCount, setRowsCount] = useState(5);
+    const {loading, error, data, fetchMore} = GetAllPeople(rowsCount);
 
     if (loading) {
-        return <CircularProgress />
+        return <SkeletonTable/>
     }
+
     if (error) {
-        return <Alert severity="error">{ error }</Alert>
+        return <Alert severity="error">{error}</Alert>
     }
-    const headers = Object.keys(data.allPeople.people?.[0]).filter((head) => !head.includes("__"));
+
     const getMorePeople = async () => {
+        setRowsCount(rowsCount + 10);
         await fetchMore({
             variables: {
-                first: 10
+                first: rowsCount
             }
         })
     }
 
-    return (
-        <>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }}>
-                    <TableHead>
-                        <TableRow variant={"head"}>
-                            {headers.map((headName) => <TableCell key={headName}>{headName}</TableCell>)}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.allPeople.people.map((row) => (
-                            <TableRow key={row.id}>
-                                <TableCell>
-                                    {row.id}
-                                </TableCell>
-                                <TableCell>
-                                    {row.name}
-                                </TableCell>
-                                <TableCell>
-                                    {row.mass}
-                                </TableCell>
-                                <TableCell>
-                                    {row.birthYear}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <Button onClick={getMorePeople}>Fetch more</Button>
-            </TableContainer>
-        </>
-    )
-}
+    const StyledButton = styled(Button)({
+        margin: "24px",
+    });
 
-export default PersonList
+    return (
+        <PersonTable data={data.allPeople.people}>
+            {data.allPeople.totalCount > rowsCount &&
+                <StyledButton variant="contained" onClick={getMorePeople}>Fetch more</StyledButton>}
+        </PersonTable>
+    );
+}

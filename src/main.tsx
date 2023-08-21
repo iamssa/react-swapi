@@ -4,18 +4,18 @@ import './index.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
 import {Error} from "./pages/Error";
-import {PersonDetail} from "./pages/PersonDetail";
-import {PersonList} from "./pages/PersonList";
+import {PersonDetailPage} from "./pages/PersonDetailPage";
+import {PersonListPage} from "./pages/PersonListPage";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <PersonList />,
+        element: <PersonListPage />,
         errorElement: <Error />,
     },
     {
         path: "person/:personId",
-        element: <PersonDetail />,
+        element: <PersonDetailPage />,
     },
 ]);
 

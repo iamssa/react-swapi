@@ -1,7 +1,6 @@
 import React, {FC} from "react";
 import {
     Paper,
-    styled,
     Table,
     TableBody,
     TableCell,
@@ -11,19 +10,16 @@ import {
 } from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {Person} from "../../hooks/__generated__/graphql";
+import {StyledTableCell, StyledTableRow} from "./styled";
+import {getPersonDataWithoutTypename} from "../../helpers/cleaning";
 
 interface PersonTableProps {
     data: Partial<Person>[];
 }
 export const PersonTable: FC<PersonTableProps> = ({data, children}) => {
     const navigate = useNavigate();
-    const headers = Object.keys(data[0]).filter((head) => !head.includes("__"));
-    const StyledTableCell = styled(TableCell)({
-        fontWeight: "bold",
-    });
-    const StyledTableRow = styled(TableRow)({
-        cursor: "pointer",
-    });
+    const headers = getPersonDataWithoutTypename(data[0]);
+
     const renderHeaderCells = () => {
         return headers.map((headName) => <StyledTableCell key={headName}>{headName}</StyledTableCell>)
     }

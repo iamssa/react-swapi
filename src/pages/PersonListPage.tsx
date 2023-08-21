@@ -8,7 +8,7 @@ import {FC, useState} from "react";
 import {SkeletonTable} from "../components/SkeletonTable/SkeletonTable";
 import {PersonTable} from "../components/PersonTable/PersonTable";
 
-export const PersonList: FC = () => {
+export const PersonListPage: FC = () => {
     const [rowsCount, setRowsCount] = useState(5);
     const {loading, error, data, fetchMore} = GetAllPeople(rowsCount);
 
